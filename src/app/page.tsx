@@ -77,7 +77,7 @@ export default function Home() {
     'Asking HN to chill with the hot takes...',
     'Checking if anyone cares... (spoiler: no)',
     'Consulting passing asteroids...',
-    'Waiting for Chuck Norris to finish destroying a server...',
+    'Waiting for the void to stop staring back...',
   ]
 
   const fetchCouncil = useCallback(async () => {
