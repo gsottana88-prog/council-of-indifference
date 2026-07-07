@@ -40,14 +40,14 @@ function ErrorView({ onRetry }: ErrorViewProps) {
     <div className="min-h-screen flex items-center justify-center p-8">
       <div className="text-center max-w-md">
         <div className="text-6xl mb-6">💀</div>
-        <h2 className="text-2xl font-bold text-red-400 mb-3">Il Consiglio è in pausa</h2>
+        <h2 className="text-2xl font-bold text-red-400 mb-3">The Council is on break</h2>
         <p className="text-gray-500 mb-6 leading-relaxed">
-          I server non rispondono. Forse è un segno dell&apos;universo.
-          O forse è solo che siamo su un hosting gratuito e abbiamo finito le chiamate API.
-          Riprova, ma senza troppe aspettative.
+          The servers aren&apos;t responding. Maybe it&apos;s a sign from the universe.
+          Or maybe we&apos;re on free hosting and ran out of API calls.
+          Try again, but keep your expectations low.
         </p>
         <button onClick={onRetry} className="px-6 py-3 border border-white/10 rounded-lg text-gray-400 hover:text-terminal hover:border-terminal/30 transition-all duration-300 font-mono text-sm">
-          › Riprova_<span className="animate-pulse">▌</span>
+          › Retry_<span className="animate-pulse">▌</span>
         </button>
       </div>
     </div>
@@ -70,14 +70,14 @@ export default function Home() {
   const [statusText, setStatusText] = useState('')
 
   const statusMessages = [
-    'Contattando il vuoto cosmico...',
-    'Svegliando i membri del consiglio...',
-    'Elaborando l\'insignificanza della tua esistenza...',
-    'Scansionando l\'universo per trovare qualcosa di cui lamentarsi...',
-    'Chiedendo a HN di smetterla con le hot take...',
-    'Verificando se a qualcuno importa... (spoiler: no)',
-    'Consultando gli asteroidi di passaggio...',
-    'Aspettando che Chuck Norris finisca di distruggere un server...',
+    'Contacting the cosmic void...',
+    'Waking up council members...',
+    'Processing the insignificance of your existence...',
+    'Scanning the universe for something to complain about...',
+    'Asking HN to chill with the hot takes...',
+    'Checking if anyone cares... (spoiler: no)',
+    'Consulting passing asteroids...',
+    'Waiting for Chuck Norris to finish destroying a server...',
   ]
 
   const fetchCouncil = useCallback(async () => {
@@ -115,15 +115,15 @@ export default function Home() {
           <span className="text-terminal"> INDIFFERENCE</span>
         </h1>
         <p className="text-sm md:text-base text-gray-500 font-mono max-w-xl mx-auto leading-relaxed">
-          Sei entità tragicomiche analizzano il mondo così non devi farlo tu.
-          Nessuna è ottimista. Sono tutte dannatamente divertenti.
+          Six tragicomic entities analyze the world so you don&apos;t have to.
+          None are optimistic. All of them are damn funny.
         </p>
         <div className="flex items-center justify-center gap-2 mt-4 text-[10px] md:text-xs font-mono text-gray-600">
           <span className="inline-block w-1.5 h-1.5 rounded-full bg-terminal animate-pulse" />
           {loading ? (
             <span className="animate-pulse">{statusText}</span>
           ) : (
-            <span>Consiglio riunito. Prendete appunti.</span>
+            <span>Council in session. Take notes.</span>
           )}
         </div>
       </header>
@@ -174,15 +174,15 @@ export default function Home() {
               onClick={fetchCouncil}
               className="group px-6 md:px-8 py-3 md:py-4 border border-white/10 rounded-xl text-sm font-mono text-gray-500 hover:text-terminal hover:border-terminal/30 transition-all duration-500 bg-white/[0.01]"
             >
-              <span className="group-hover:hidden">› Riunisci di nuovo il consiglio_</span>
-              <span className="hidden group-hover:inline text-terminal">› NUOVA SESSIONE_</span>
+              <span className="group-hover:hidden">› Reconvene the council_</span>
+              <span className="hidden group-hover:inline text-terminal">› NEW SESSION_</span>
             </button>
           </div>
         </>
       )}
 
       <footer className="text-center pb-6 text-[10px] md:text-xs font-mono text-gray-700">
-        Council of Indifference · Nessun API key necessario · Solo dati pubblici e cattiveria gratuita
+        Council of Indifference · No API keys required · Just public data and free cynicism
       </footer>
     </main>
   )

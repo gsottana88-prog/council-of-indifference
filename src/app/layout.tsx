@@ -3,16 +3,16 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: 'Council of Indifference',
-  description: 'Sei personaggi tragicomici analizzano la tua realtà. Nessuno è ottimista. Sono tutti dannatamente divertenti.',
+  description: 'Six tragicomic personas analyze your reality. None are optimistic. All of them are damn funny.',
   openGraph: {
     title: 'Council of Indifference',
-    description: 'L\'unica assemblea che non si preoccupa di niente. E te lo dice in faccia.',
+    description: 'The only assembly that doesn\'t care about anything. And it tells you to your face.',
   },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="it">
+    <html lang="en">
       <body className="crt antialiased">{children}</body>
     </html>
   )

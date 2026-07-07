@@ -42,7 +42,7 @@ async function getHNTopStory(): Promise<CouncilData> {
       timestamp: new Date().toISOString(),
     }
   } catch (e) {
-    return { member, rawInput: 'Failed to reach HN', take: `Nemmeno Hacker News risponde. Forse è meglio così.`, timestamp: new Date().toISOString() }
+    return { member, rawInput: 'Failed to reach HN', take: `Even Hacker News isn't answering. Maybe that's for the best.`, timestamp: new Date().toISOString() }
   }
 }
 
@@ -58,7 +58,7 @@ async function getNasaApod(): Promise<CouncilData> {
       timestamp: new Date().toISOString(),
     }
   } catch (e) {
-    return { member, rawInput: 'NASA is busy', take: `La NASA non risponde. Forse gli alieni hanno bloccato le linee. O forse è solo martedì.`, timestamp: new Date().toISOString() }
+    return { member, rawInput: 'NASA is busy', take: `NASA isn't answering. Maybe aliens cut the lines. Or maybe it's just Tuesday.`, timestamp: new Date().toISOString() }
   }
 }
 
@@ -76,7 +76,7 @@ async function getWeather(location: Location): Promise<CouncilData> {
     })
     const forecastData = await forecastRes.json()
     const period = forecastData.properties.periods[0]
-    const city = location.city ?? 'Sconosciuta'
+    const city = location.city ?? 'Unknown'
     return {
       member,
       rawInput: `${city}: ${period.temperature}°${period.temperatureUnit}, ${period.shortForecast}`,
@@ -84,7 +84,7 @@ async function getWeather(location: Location): Promise<CouncilData> {
       timestamp: new Date().toISOString(),
     }
   } catch (e) {
-    return { member, rawInput: 'Weather service down', take: `Il meteo non è disponibile. Come la speranza, ultimamente.`, timestamp: new Date().toISOString() }
+    return { member, rawInput: 'Weather service down', take: `Weather is unavailable. Like hope, lately.`, timestamp: new Date().toISOString() }
   }
 }
 
@@ -101,7 +101,7 @@ async function getGitHubTrends(): Promise<CouncilData> {
       timestamp: new Date().toISOString(),
     }
   } catch (e) {
-    return { member, rawInput: 'GitHub is trending-less', take: `GitHub non mi dice cosa va di moda. Forse oggi tutti programmano in silenzio. Come dovrebbe essere.`, timestamp: new Date().toISOString() }
+    return { member, rawInput: 'GitHub is trending-less', take: `GitHub won't tell me what's trending. Maybe everyone's coding in silence today. As it should be.`, timestamp: new Date().toISOString() }
   }
 }
 
@@ -117,7 +117,7 @@ async function getJoke(): Promise<CouncilData> {
       timestamp: new Date().toISOString(),
     }
   } catch (e) {
-    return { member, rawInput: 'Chuck Norris broke the API', take: `Chuck Norris non risponde. Forse sta prendendo a pugni il server. Rispetto.`, timestamp: new Date().toISOString() }
+    return { member, rawInput: 'Chuck Norris broke the API', take: `Chuck Norris isn't answering. Probably punching the server. Respect.`, timestamp: new Date().toISOString() }
   }
 }
 
@@ -145,8 +145,8 @@ export async function GET() {
   const members: CouncilData[] = results.map((r) =>
     r.status === 'fulfilled' ? r.value : {
       member: councilMembers[results.indexOf(r)],
-      rawInput: 'Errore sconosciuto',
-      take: 'Anche l\'universo ha i suoi giorni no. Oggi è uno di quelli. Ecco, l\'hai scoperto.',
+      rawInput: 'Unknown error',
+      take: 'Even the universe has off days. Today is one of them. There, you found out.',
       timestamp: new Date().toISOString(),
     },
   )

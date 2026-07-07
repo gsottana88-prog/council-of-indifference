@@ -2,59 +2,59 @@ const pick = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)]
 
 export function startupBroTemplate(title: string, score: number, comments: number): string {
   return pick([
-    `"${title}" — ${score} upvote${score !== 1 ? 's' : ''} e ${comments} comment${comments !== 1 ? 'i' : 'o'}. Il nuovo Vangelo del tech secondo Hacker News. Tra 6 ore nessuno se lo ricorderà. Compreso chi l'ha scritto.`,
-    `HN ci riprova: "${title}" ${score} persone hanno pensato "sì, questo merita il mio voto". La soglia dell'entusiasmo umano è sempre più bassa.`,
-    `"${title}". Bella. ${comments} persone hanno speso minuti della loro vita discutendone. Avrebbero potuto imparare il giapponese. Hanno scelto questo.`,
-    `${score} punti per "${title}". Il sistema di ricompensa dopaminica del tech funziona a pieno regime. ${comments} commenti, di cui ${Math.max(0, comments - 3)} sono pedanti correzioni semantiche.`,
-    `Breaking: "${title}". ${score} persone su HN hanno appena scoperto qualcosa che dimenticheranno domani. Tu incluso.`,
+    `"${title}" — ${score} upvote${score !== 1 ? 's' : ''} and ${comments} comment${comments !== 1 ? 's' : ''}. The new tech gospel according to Hacker News. In 6 hours no one will remember it. Including the person who wrote it.`,
+    `HN is at it again: "${title}" ${score} people thought "yes, this deserves my vote." The bar for human enthusiasm keeps getting lower.`,
+    `"${title}". Nice. ${comments} people spent minutes of their lives arguing about it. They could have learned Japanese. They chose this.`,
+    `${score} points for "${title}". The tech dopamine reward system is working at full capacity. ${comments} comments, ${Math.max(0, comments - 3)} of which are pedantic semantic corrections.`,
+    `Breaking: "${title}". ${score} people on HN just discovered something they'll forget tomorrow. You included.`,
   ])
 }
 
 export function cosmicRickTemplate(title: string, explanation: string): string {
   const truncated = explanation.length > 180 ? explanation.slice(0, 177) + '...' : explanation
   return pick([
-    `Oggi: "${title}". ${truncated} Tradotto: l'universo continua a fare cose spettacolari mentre tu sei preoccupato per quella riunione delle 15:00. Mettila in prospettiva. O no. Tanto sei irrilevante.`,
-    `"${title}". La NASA ha fotografato roba a milioni di anni luce. Tu hai appena speso 45 minuti a decidere cosa mangiare a pranzo. Siamo sulla stessa barca, ma la mia ha un motore a curvatura.`,
-    `"${title}" — ${truncated} Bella scoperta, umani. Nel frattempo, il 99.9999% dell'universo osservabile non sa nemmeno che esistete. E sta benissimo così.`,
-    `APOD di oggi: "${title}". ${truncated} È bellissimo. È affascinante. E non cambierà assolutamente nulla della tua giornata. Come ogni cosa, del resto.`,
+    `Today: "${title}". ${truncated} Translated: the universe keeps doing spectacular things while you worry about that 3pm meeting. Put it in perspective. Or don't. You're irrelevant either way.`,
+    `"${title}". NASA photographed stuff millions of light-years away. You just spent 45 minutes deciding what to eat for lunch. We're in the same boat, but mine has a warp drive.`,
+    `"${title}" — ${truncated} Great discovery, humans. Meanwhile 99.9999% of the observable universe doesn't even know you exist. And it's perfectly fine with that.`,
+    `APOD today: "${title}". ${truncated} It's beautiful. It's fascinating. And it won't change a single thing about your day. Like everything else, really.`,
   ])
 }
 
 export function weatherDadTemplate(temp: number, forecast: string, city: string): string {
   return pick([
-    `${city}: ${temp}°C, ${forecast.toLowerCase()}. Bella roba. Ma troverai comunque qualcosa di cui lamentarti. Lo fai sempre. È la tua unica costante.`,
-    `A ${city} ci sono ${temp}°C con ${forecast.toLowerCase()}. Ti ricordi quella volta che hai detto "che bella giornata"? È stata un'eccezione, non la regola. Torna dentro.`,
-    `${forecast} a ${city}, ${temp}°C. Meteorologicamente parlando, è una giornata nella media. Esattamente come te.`,
-    `${temp} gradi. ${forecast}. ${city}. Ecco. Ora puoi uscire di casa. O non uscire. Tanto il tempo se ne frega.`,
+    `${city}: ${temp.toFixed(0)}°F, ${forecast.toLowerCase()}. Nice. But you'll still find something to complain about. You always do. It's your only constant.`,
+    `In ${city} it's ${temp.toFixed(0)}°F with ${forecast.toLowerCase()}. Remember that time you said "what a beautiful day"? That was an exception, not the rule. Go back inside.`,
+    `${forecast} in ${city}, ${temp.toFixed(0)}°F. Meteorologically speaking, it's an average day. Exactly like you.`,
+    `${temp.toFixed(0)} degrees. ${forecast}. ${city}. There. Now you can go outside. Or not. The weather doesn't care.`,
   ])
 }
 
 export function internetIdTemplate(repo: string, description: string, language: string, stars: number): string {
-  const desc = description || 'nessuna descrizione, come la tua vita sociale'
+  const desc = description || 'no description, like your social life'
   return pick([
-    `GitHub va in brodo d'oro per "${repo}". ${stars} stelle. Linguaggio: ${language}. "${desc}". Un altro framework che risolverà tutti i problemi del mondo. O li creerà. Stessa cosa.`,
-    `Wow, "${repo}" sta spopolando su GitHub! ${stars} stelle! "${desc}" ${language}. Bellissimo. Tra 3 mesi nessuno lo manterrà più. Ma il hype è stato divertente, no?`,
-    `Trending su GitHub: "${repo}". ${stars} stelle. ${language}. "${desc}". Sei emozionato? Non dovresti. Neanche chi l'ha scritto sa se servirà a qualcosa.`,
-    `"${repo}": ${stars} stelle, ${language}… "${desc}" L'open source è bellissimo: gente che lavora gratis per risolvere problemi che non sapeva di avere. Lo spirito del capitalismo, versione nerd.`,
+    `GitHub is losing its mind over "${repo}". ${stars} stars. Language: ${language}. "${desc}". Another framework that will solve all the world's problems. Or create them. Same thing.`,
+    `Wow, "${repo}" is blowing up on GitHub! ${stars} stars! "${desc}" ${language}. Beautiful. In 3 months no one will maintain it. But the hype was fun, right?`,
+    `Trending on GitHub: "${repo}". ${stars} stars. ${language}. "${desc}". Are you excited? You shouldn't be. Even the author doesn't know if it'll be useful.`,
+    `"${repo}": ${stars} stars, ${language}... "${desc}" Open source is beautiful: people working for free to solve problems they didn't know they had. The spirit of capitalism, nerd edition.`,
   ])
 }
 
 export function dadJokeTemplate(joke: string): string {
   return pick([
-    `Battuta: "${joke}" È terribile. Lo so. Ma l'ha detto l'universo, non io. Prenditela con lui.`,
-    `"${joke}" Se stai ridendo, mi preoccupo per te. Se non stai ridendo, mi preoccupo comunque. Non si vince, con me.`,
-    `${joke} Ecco. Una perla di saggezza casuale. Non chiedermi perché. Non cercare un senso. Goditela. O soffrisci. La scelta è tua (anche se è irrilevante).`,
-    `Il consiglio del giorno: "${joke}" Certo, non l'hai chiesto. Ma te lo do lo stesso. Perché? Perché posso. Perché sei qui. Perché no.`,
+    `Joke: "${joke}" It's terrible. I know. But the universe told it, not me. Take it up with him.`,
+    `"${joke}" If you're laughing, I'm worried about you. If you're not laughing, I'm still worried. Can't win with me.`,
+    `${joke} There. A random nugget of wisdom. Don't ask me why. Don't look for meaning. Enjoy it. Or suffer. Your choice (not that it matters).`,
+    `Word of the day: "${joke}" Sure, you didn't ask for it. But I'm giving it to you anyway. Why? Because I can. Because you're here. Because why not.`,
   ])
 }
 
 export function oracleTemplate(): string {
   const fortunes = [
-    'Oggi è un buon giorno per iniziare qualcosa. O per finire qualcosa. O per non fare nulla. La fortuna è dalla tua parte solo se credi di averne bisogno. E non ne hai bisogno.',
-    'Le stelle dicono: "Tranquillo, tanto peggio di ieri non può andare." Spoiler: può.',
-    'L\'oracolo ha parlato: ciò che cerchi ti troverà, ma probabilmente in un momento sbagliato e in un contesto imbarazzante.',
-    'I tarocchi rivelano: il tuo destino è in una pausa caffè tra il "forse" e il "chissà". Goditi l\'attesa.',
-    'Oggi il tuo oroscopo dice: "Grandi cambiamenti all\'orizzonte." Ma l\'orizzonte si sposta sempre. Quindi, calma.',
+    'Today is a good day to start something. Or finish something. Or do nothing. Luck is on your side only if you believe you need it. And you don\'t need it.',
+    'The stars say: "Relax, it can\'t get worse than yesterday." Spoiler: it can.',
+    'The oracle has spoken: what you seek will find you, but probably at the wrong time and in an embarrassing context.',
+    'The tarot reveals: your destiny is on a coffee break between "maybe" and "who knows." Enjoy the wait.',
+    'Today your horoscope says: "Big changes on the horizon." But the horizon keeps moving. So... chill.',
   ]
   return pick(fortunes)
 }
