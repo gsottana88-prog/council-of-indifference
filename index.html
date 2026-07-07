@@ -90,7 +90,7 @@ footer{text-align:center;padding-bottom:1.5rem;font-size:0.65rem;color:#444;font
 <script>
 const COUNCIL = [
   { id:'startup-bro', name:'🔥 The Startup Bro', title:'Hacker News Prophet', color:'#ff6b6b', icon:'⎈', source:'Hacker News' },
-  { id:'cosmic-rick', name:'🌌 Cosmic Rick', title:'Interstellar Nihilist', color:'#6b5bff', icon:'✦', source:'NASA APOD' },
+  { id:'news-dweller', name:'📰 The News Dweller', title:'Tech News Cynic', color:'#6b5bff', icon:'✦', source:'Reddit r/technology' },
   { id:'weather-dad', name:'🌦️ Weather Dad', title:'Meteorological Cynic', color:'#45b7d1', icon:'☁', source:'National Weather Service' },
   { id:'internet-id', name:'🐙 The Code Karen', title:'GitHub Trendspotter', color:'#4ecdc4', icon:'⌘', source:'GitHub Trending' },
   { id:'local-philosopher', name:'🪐 The Local Philosopher', title:'Professional Cynic', color:'#ff9f43', icon:'⚡', source:'The Void Within' },
@@ -109,13 +109,13 @@ function startupBroTemplate(title,score,comments){
   ])
 }
 
-function cosmicRickTemplate(title,explanation){
-  const t = explanation.length>180?explanation.slice(0,177)+'...':explanation
+function redditTemplate(title,score,comments,sub){
   return pick([
-    `Today: "${title}". ${t} Translated: the universe keeps doing spectacular things while you worry about that 3pm meeting. Put it in perspective. Or don't. You're irrelevant either way.`,
-    `"${title}". NASA photographed stuff millions of light-years away. You just spent 45 minutes deciding what to eat for lunch. We're in the same boat, but mine has a warp drive.`,
-    `"${title}" — ${t} Great discovery, humans. Meanwhile 99.9999% of the observable universe doesn't even know you exist. And it's perfectly fine with that.`,
-    `APOD today: "${title}". ${t} It's beautiful. It's fascinating. And it won't change a single thing about your day. Like everything else, really.`,
+    `r/${sub} is losing its collective mind over "${title}". ${score} upvotes, ${comments} comments. The discourse is dense, informed, and wrong. As always.`,
+    `"${title}" — ${score} people thought this was worth upvoting on r/${sub}. In 24 hours it'll be buried under cat memes. The internet's memory is a goldfish with ADHD.`,
+    `Breaking on r/${sub}: "${title}" ${score} upvotes. The comments are a mix of people who read the headline and people who read nothing. Both are equally confident about being right.`,
+    `Today's tech drama on r/${sub}: "${title}" ${score} upvotes, ${comments} hot takes. Everyone has an opinion. Nobody has a solution. Classic internet.`,
+    `r/${sub} post: "${title}" — ${score} nerds nodded in agreement. ${comments} comments later, the thread is a war crime of pedantry and missing the point.`,
   ])
 }
 
@@ -140,35 +140,36 @@ function gitHubTemplate(repo,desc,lang,stars){
 
 function localPhilosopherTemplate(){
   return pick([
-    'The universe is indifferent not because it hates you, but because "you" aren\'t really a thing it can register. You\'re a local fluctuation. A temporary typo in the cosmos.',
-    'You spend 80 years trying to matter. The universe spends 14 billion years not noticing. One of you is winning, and it\'s not the one with a 401(k).',
-    'Every time you feel important, remember: you\'re a bag of mostly water on a rock hurtling through a void so cold and vast it makes your problems look like dust. Comforting, right?',
-    'You asked for wisdom. Here it is: nothing matters, everything is fine, and the only honest response to existence is a long, slow nod. There. Saved you therapy.',
-    'The void doesn\'t answer prayers. It doesn\'t answer anything. It just void-s. That\'s the cosmic equivalent of a shrug. Take notes.',
-    'Your deepest thoughts? Electrical impulses in a damp organ. Your grandest ambitions? Carbon trying to feel special. Sit down.',
+    'Your startup idea has been done before. Better. By someone who gave up. The only innovation left is learning to live with the disappointment.',
+    'You spent 4 years learning to code to build an app that does what a spreadsheet already does. But with animations. Progress.',
+    'Every commit message is a cry for help. "fix bug", "update", "minor changes" — the programmer equivalent of "I have no idea what I\'m doing."',
+    'The real Y2K bug was expecting technology to make us happy. Instead we got infinite scroll, subscription fatigue, and a toaster that phones home.',
+    'Another day, another framework. Last week it was the hot new thing. This week it\'s legacy. Next week it\'ll be a side project nobody asked for.',
+    'You don\'t have an attention span problem. You have a "the world is on fire and my feed keeps buzzing about it" problem. Big difference.',
   ])
 }
 
 function oracleTemplate(){
   return pick([
-    'Today is a good day to start something. Or finish something. Or do nothing. Luck is on your side only if you believe you need it. And you don\'t need it.',
-    'The stars say: "Relax, it can\'t get worse than yesterday." Spoiler: it can.',
-    'The oracle has spoken: what you seek will find you, but probably at the wrong time and in an embarrassing context.',
-    'The tarot reveals: your destiny is on a coffee break between "maybe" and "who knows." Enjoy the wait.',
-    'Today your horoscope says: "Big changes on the horizon." But the horizon keeps moving. So... chill.',
+    'The stars say: your code will break in production on a Friday at 5pm. Not because of a bug, but because the universe has a sense of humor.',
+    'I see a meeting in your future that could have been an email. I see an email that could have been a Slack message. I see a Slack message that could have been nothing.',
+    'The tarot reveals: you will spend 3 hours debugging a missing semicolon. You will feel shame. Then you will do it again next week.',
+    'The oracle has spoken: the AI won\'t take your job. But someone who knows how to use it will. And they\'ll finish in half the time while you\'re still reading the docs.',
+    'Today\'s prophecy: you will open Hacker News 47 times today. You will learn nothing after the third visit. You\'ll do it anyway. Free will is a myth maintained by tech blogs.',
+    'The void predicts: your next great idea is already in production as someone else\'s startup. They\'re also losing money. Misery is the only true open source project.',
   ])
 }
 
 // --- Data fetching ---
 const STATUS_MSGS = [
-  'Contacting the cosmic void...',
-  'Waking up council members...',
-  'Processing the insignificance of your existence...',
-  'Scanning the universe for something to complain about...',
+  'Scraping today\'s tech drama...',
+  'Refreshing the discourse feed...',
+  'Loading the hot takes...',
+  'Waking up the council members...',
   'Asking HN to chill with the hot takes...',
   'Checking if anyone cares... (spoiler: no)',
-  'Consulting passing asteroids...',
-  'Waiting for the void to stop staring back...',
+  'Aggregating the cynicism...',
+  'Filtering the signal from the noise... (it\'s all noise)',
 ]
 
 async function getHN(){
@@ -183,13 +184,14 @@ async function getHN(){
   }
 }
 
-async function getNASA(){
+async function getReddit(){
   try{
-    const r=await fetch('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY')
+    const r=await fetch('https://www.reddit.com/r/technology/hot.json?limit=5',{headers:{'User-Agent':'CouncilOfIndifference/1.0'}})
     const d=await r.json()
-    return {raw:`"${d.title}"`,take:cosmicRickTemplate(d.title,d.explanation)}
+    const p=d.data.children[0].data
+    return {raw:`"${p.title}" (r/${p.subreddit}, ${p.score} upvotes)`,take:redditTemplate(p.title,p.score,p.num_comments,p.subreddit)}
   }catch{
-    return {raw:'NASA is busy',take:'NASA isn\'t answering. Maybe aliens cut the lines. Or maybe it\'s just Tuesday.'}
+    return {raw:'Reddit is down',take:'Reddit isn\'t answering. Probably arguing with itself. That tracks.'}
   }
 }
 
@@ -220,11 +222,11 @@ async function getGitHub(){
 }
 
 function getPhilosopher(){
-  return {raw:'Consulting the inner void...',take:localPhilosopherTemplate()}
+  return {raw:'Consulting the tech cynic archives...',take:localPhilosopherTemplate()}
 }
 
 function getOracleInner(){
-  return {raw:'Consulting the void...',take:oracleTemplate()}
+  return {raw:'Consulting the tech prophecies...',take:oracleTemplate()}
 }
 
 // --- Render ---
@@ -278,11 +280,11 @@ async function loadCouncil(){
   const iv=setInterval(()=>{si=(si+1)%STATUS_MSGS.length;statusText.textContent=STATUS_MSGS[si]},1200)
 
   try{
-    const [hn,nasa,weather,git,phil,oracle]=await Promise.all([
-      getHN(),getNASA(),getWeather(),getGitHub(),
+    const [hn,reddit,weather,git,phil,oracle]=await Promise.all([
+      getHN(),getReddit(),getWeather(),getGitHub(),
       Promise.resolve(getPhilosopher()),Promise.resolve(getOracleInner()),
     ])
-    renderCards([hn,nasa,weather,git,phil,oracle])
+    renderCards([hn,reddit,weather,git,phil,oracle])
     statusText.textContent='Council in session. Take notes.'
     statusText.classList.remove('status-text')
     reconveneWrap.style.display='flex'
