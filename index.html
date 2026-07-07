@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Council of Indifference</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0a0a0f;--terminal:#00ff88;--card-bg:rgba(255,255,255,0.015);--border:rgba(255,255,255,0.05);--text:#a0a0a0;--text-dim:#666;--text-dimmer:#444}
+body{background:var(--bg);color:var(--text);font-family:'Courier New',monospace;min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,136,0.03) 2px,rgba(0,255,136,0.03) 4px);pointer-events:none;z-index:9999}
+body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at center,transparent 60%,rgba(0,0,0,0.6) 100%);pointer-events:none;z-index:9998}
+::selection{background:rgba(0,255,136,0.2);color:#fff}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:3px}
+#app{max-width:1200px;margin:0 auto;padding:2rem 1rem;min-height:100vh;display:flex;flex-direction:column}
+header{text-align:center;margin-bottom:1.5rem;margin-top:2rem}
+h1{font-size:3.5rem;font-weight:900;letter-spacing:-0.03em;color:#fff;text-shadow:0 0 40px rgba(0,255,136,0.3),0 0 80px rgba(0,255,136,0.1);line-height:1.1}
+h1 .hl{color:var(--terminal)}
+.subtitle{font-size:0.85rem;color:var(--text-dim);max-width:500px;margin:0.75rem auto 0;line-height:1.6}
+.status-bar{display:flex;align-items:center;justify-content:center;gap:0.5rem;margin-top:1rem;font-size:0.7rem;color:#555}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--terminal);flex-shrink:0}
+.dot.pulse{animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.status-text{animation:pulse 1.5s ease-in-out infinite}
+/* Loading skeleton */
+.grid{display:grid;grid-template-columns:1fr;gap:0.75rem;flex:1}
+@media(min-width:640px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1024px){.grid{grid-template-columns:repeat(3,1fr)}}
+.skeleton{border:1px solid var(--border);border-radius:12px;padding:1.25rem;background:var(--card-bg)}
+.skel-bar{height:0.75rem;background:rgba(255,255,255,0.04);border-radius:4px;margin-bottom:0.5rem;animation:shimmer 1.5s ease-in-out infinite}
+.skel-bar:first-child{width:60%}
+.skel-bar:nth-child(2){width:40%;height:0.6rem}
+.skel-bar:nth-child(3){width:100%}
+.skel-bar:nth-child(4){width:85%}
+.skel-bar:nth-child(5){width:70%}
+@keyframes shimmer{0%,100%{opacity:1}50%{opacity:0.3}}
+/* Cards */
+.card{border:1px solid var(--border);border-radius:12px;padding:1.25rem;background:var(--card-bg);transition:all 0.5s;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;inset:0;border-radius:12px;opacity:0;transition:opacity 0.5s;pointer-events:none}
+.card:hover{border-color:rgba(255,255,255,0.1)}
+.card:hover::before{opacity:1}
+.card.hidden{display:none}
+.card-header{display:flex;align-items:flex-start;gap:0.75rem;margin-bottom:1rem}
+.avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);flex-shrink:0}
+.card-name{font-size:0.9rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-meta{font-size:0.65rem;color:var(--text-dimmer);font-family:'Courier New',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:0.1rem}
+.card-take{font-size:0.8rem;color:var(--text-dim);line-height:1.6;font-family:'Courier New',monospace}
+.card-raw{margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid rgba(255,255,255,0.03);font-size:0.6rem;color:#555;font-family:'Courier New',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* Error */
+.error-state{flex:1;display:flex;align-items:center;justify-content:center;padding:2rem}
+.error-inner{text-align:center;max-width:400px}
+.error-icon{font-size:4rem;margin-bottom:1.5rem}
+.error-title{font-size:1.5rem;font-weight:700;color:#f87171;margin-bottom:0.75rem}
+.error-desc{color:#666;font-size:0.85rem;line-height:1.6;margin-bottom:1.5rem}
+.btn{background:none;border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:0.75rem 2rem;color:#999;font-family:'Courier New',monospace;font-size:0.8rem;cursor:pointer;transition:all 0.3s}
+.btn:hover{color:var(--terminal);border-color:rgba(0,255,136,0.3)}
+/* Reconvene */
+.reconvene-wrap{display:flex;justify-content:center;margin:2rem 0 1rem}
+.reconvene-btn{padding:0.75rem 2rem;border:1px solid rgba(255,255,255,0.1);border-radius:12px;background:rgba(255,255,255,0.01);color:#666;font-family:'Courier New',monospace;font-size:0.85rem;cursor:pointer;transition:all 0.5s}
+.reconvene-btn:hover{color:var(--terminal);border-color:rgba(0,255,136,0.3)}
+.reconvene-btn .default{display:inline}
+.reconvene-btn .hover-text{display:none}
+.reconvene-btn:hover .default{display:none}
+.reconvene-btn:hover .hover-text{display:inline;color:var(--terminal)}
+/* Footer */
+footer{text-align:center;padding-bottom:1.5rem;font-size:0.65rem;color:#444;font-family:'Courier New',monospace;margin-top:auto}
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>COUNCIL OF<br><span class="hl">INDIFFERENCE</span></h1>
+    <p class="subtitle">Six tragicomic entities analyze the world so you don't have to. None are optimistic. All of them are damn funny.</p>
+    <div class="status-bar">
+      <span class="dot" id="status-dot"></span>
+      <span id="status-text"></span>
+    </div>
+  </header>
+  <div id="content"></div>
+  <div class="reconvene-wrap" id="reconvene-wrap" style="display:none">
+    <button class="reconvene-btn" id="reconvene-btn">
+      <span class="default">› Reconvene the council_</span>
+      <span class="hover-text">› NEW SESSION_</span>
+    </button>
+  </div>
+  <footer>Council of Indifference · No servers required · Just public data and free cynicism</footer>
+</div>
+<script>
+const COUNCIL = [
+  { id:'startup-bro', name:'🔥 The Startup Bro', title:'Hacker News Prophet', color:'#ff6b6b', icon:'⎈', source:'Hacker News' },
+  { id:'cosmic-rick', name:'🌌 Cosmic Rick', title:'Interstellar Nihilist', color:'#6b5bff', icon:'✦', source:'NASA APOD' },
+  { id:'weather-dad', name:'🌦️ Weather Dad', title:'Meteorological Cynic', color:'#45b7d1', icon:'☁', source:'National Weather Service' },
+  { id:'internet-id', name:'🐙 The Code Karen', title:'GitHub Trendspotter', color:'#4ecdc4', icon:'⌘', source:'GitHub Trending' },
+  { id:'local-philosopher', name:'🪐 The Local Philosopher', title:'Professional Cynic', color:'#ff9f43', icon:'⚡', source:'The Void Within' },
+  { id:'oracle', name:'🔮 The Oracle', title:'Cosmic Fortune Teller', color:'#ff6bb5', icon:'◎', source:'The Void' },
+]
+
+const pick = a => a[Math.floor(Math.random()*a.length)]
+
+function startupBroTemplate(title,score,comments){
+  return pick([
+    `"${title}" — ${score} upvote${score!==1?'s':''} and ${comments} comment${comments!==1?'s':''}. The new tech gospel according to Hacker News. In 6 hours no one will remember it. Including the person who wrote it.`,
+    `HN is at it again: "${title}" ${score} people thought "yes, this deserves my vote." The bar for human enthusiasm keeps getting lower.`,
+    `"${title}". Nice. ${comments} people spent minutes of their lives arguing about it. They could have learned Japanese. They chose this.`,
+    `${score} points for "${title}". The tech dopamine reward system is working at full capacity. ${comments} comments, ${Math.max(0,comments-3)} of which are pedantic semantic corrections.`,
+    `Breaking: "${title}". ${score} people on HN just discovered something they'll forget tomorrow. You included.`,
+  ])
+}
+
+function cosmicRickTemplate(title,explanation){
+  const t = explanation.length>180?explanation.slice(0,177)+'...':explanation
+  return pick([
+    `Today: "${title}". ${t} Translated: the universe keeps doing spectacular things while you worry about that 3pm meeting. Put it in perspective. Or don't. You're irrelevant either way.`,
+    `"${title}". NASA photographed stuff millions of light-years away. You just spent 45 minutes deciding what to eat for lunch. We're in the same boat, but mine has a warp drive.`,
+    `"${title}" — ${t} Great discovery, humans. Meanwhile 99.9999% of the observable universe doesn't even know you exist. And it's perfectly fine with that.`,
+    `APOD today: "${title}". ${t} It's beautiful. It's fascinating. And it won't change a single thing about your day. Like everything else, really.`,
+  ])
+}
+
+function weatherDadTemplate(temp,forecast,city){
+  return pick([
+    `${city}: ${temp}°F, ${forecast.toLowerCase()}. Nice. But you'll still find something to complain about. You always do. It's your only constant.`,
+    `In ${city} it's ${temp}°F with ${forecast.toLowerCase()}. Remember that time you said "what a beautiful day"? That was an exception, not the rule. Go back inside.`,
+    `${forecast} in ${city}, ${temp}°F. Meteorologically speaking, it's an average day. Exactly like you.`,
+    `${temp} degrees. ${forecast}. ${city}. There. Now you can go outside. Or not. The weather doesn't care.`,
+  ])
+}
+
+function gitHubTemplate(repo,desc,lang,stars){
+  const d=desc||'no description, like your social life'
+  return pick([
+    `GitHub is losing its mind over "${repo}". ${stars} stars. Language: ${lang}. "${d}". Another framework that will solve all the world's problems. Or create them. Same thing.`,
+    `Wow, "${repo}" is blowing up on GitHub! ${stars} stars! "${d}" ${lang}. Beautiful. In 3 months no one will maintain it. But the hype was fun, right?`,
+    `Trending on GitHub: "${repo}". ${stars} stars. ${lang}. "${d}". Are you excited? You shouldn't be. Even the author doesn't know if it'll be useful.`,
+    `"${repo}": ${stars} stars, ${lang}... "${d}" Open source is beautiful: people working for free to solve problems they didn't know they had. The spirit of capitalism, nerd edition.`,
+  ])
+}
+
+function localPhilosopherTemplate(){
+  return pick([
+    'The universe is indifferent not because it hates you, but because "you" aren\'t really a thing it can register. You\'re a local fluctuation. A temporary typo in the cosmos.',
+    'You spend 80 years trying to matter. The universe spends 14 billion years not noticing. One of you is winning, and it\'s not the one with a 401(k).',
+    'Every time you feel important, remember: you\'re a bag of mostly water on a rock hurtling through a void so cold and vast it makes your problems look like dust. Comforting, right?',
+    'You asked for wisdom. Here it is: nothing matters, everything is fine, and the only honest response to existence is a long, slow nod. There. Saved you therapy.',
+    'The void doesn\'t answer prayers. It doesn\'t answer anything. It just void-s. That\'s the cosmic equivalent of a shrug. Take notes.',
+    'Your deepest thoughts? Electrical impulses in a damp organ. Your grandest ambitions? Carbon trying to feel special. Sit down.',
+  ])
+}
+
+function oracleTemplate(){
+  return pick([
+    'Today is a good day to start something. Or finish something. Or do nothing. Luck is on your side only if you believe you need it. And you don\'t need it.',
+    'The stars say: "Relax, it can\'t get worse than yesterday." Spoiler: it can.',
+    'The oracle has spoken: what you seek will find you, but probably at the wrong time and in an embarrassing context.',
+    'The tarot reveals: your destiny is on a coffee break between "maybe" and "who knows." Enjoy the wait.',
+    'Today your horoscope says: "Big changes on the horizon." But the horizon keeps moving. So... chill.',
+  ])
+}
+
+// --- Data fetching ---
+const STATUS_MSGS = [
+  'Contacting the cosmic void...',
+  'Waking up council members...',
+  'Processing the insignificance of your existence...',
+  'Scanning the universe for something to complain about...',
+  'Asking HN to chill with the hot takes...',
+  'Checking if anyone cares... (spoiler: no)',
+  'Consulting passing asteroids...',
+  'Waiting for the void to stop staring back...',
+]
+
+async function getHN(){
+  try{
+    const r=await fetch('https://hacker-news.firebaseio.com/v0/topstories.json')
+    const ids=await r.json()
+    const ir=await fetch(`https://hacker-news.firebaseio.com/v0/item/${ids[0]}.json`)
+    const item=await ir.json()
+    return {raw:`"${item.title}" (${item.score} pts, ${item.descendants||0} comments)`,take:startupBroTemplate(item.title,item.score,item.descendants||0)}
+  }catch{
+    return {raw:'Failed to reach HN',take:'Even Hacker News isn\'t answering. Maybe that\'s for the best.'}
+  }
+}
+
+async function getNASA(){
+  try{
+    const r=await fetch('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY')
+    const d=await r.json()
+    return {raw:`"${d.title}"`,take:cosmicRickTemplate(d.title,d.explanation)}
+  }catch{
+    return {raw:'NASA is busy',take:'NASA isn\'t answering. Maybe aliens cut the lines. Or maybe it\'s just Tuesday.'}
+  }
+}
+
+async function getWeather(){
+  try{
+    const pos=await new Promise((res,rej)=>{navigator.geolocation.getCurrentPosition(res,rej,{timeout:5000})})
+    const lat=pos.coords.latitude,lon=pos.coords.longitude
+    const pr=await fetch(`https://api.weather.gov/points/${lat},${lon}`)
+    const pd=await pr.json()
+    const fr=await fetch(pd.properties.forecast)
+    const fd=await fr.json()
+    const p=fd.properties.periods[0]
+    return {raw:`${lat.toFixed(2)},${lon.toFixed(2)}: ${p.temperature}°${p.temperatureUnit}, ${p.shortForecast}`,take:weatherDadTemplate(p.temperature,p.shortForecast,'Your Location')}
+  }catch{
+    return {raw:'Weather service unavailable',take:'The weather is unavailable. Like hope, lately.'}
+  }
+}
+
+async function getGitHub(){
+  try{
+    const r=await fetch('https://api.github.com/search/repositories?q=stars:%3E1000&sort=stars&order=desc&per_page=10',{headers:{Accept:'application/vnd.github.v3+json'}})
+    const d=await r.json()
+    const t=d.items[0]
+    return {raw:`${t.full_name} — ${t.language||'N/A'}, ${t.stargazers_count} stars`,take:gitHubTemplate(t.full_name,t.description,t.language||'N/A',t.stargazers_count)}
+  }catch{
+    return {raw:'GitHub is trending-less',take:'GitHub won\'t tell me what\'s trending. Maybe everyone\'s coding in silence today. As it should be.'}
+  }
+}
+
+function getPhilosopher(){
+  return {raw:'Consulting the inner void...',take:localPhilosopherTemplate()}
+}
+
+function getOracleInner(){
+  return {raw:'Consulting the void...',take:oracleTemplate()}
+}
+
+// --- Render ---
+const content=document.getElementById('content')
+const statusText=document.getElementById('status-text')
+const statusDot=document.getElementById('status-dot')
+const reconveneWrap=document.getElementById('reconvene-wrap')
+const reconveneBtn=document.getElementById('reconvene-btn')
+
+function renderSkeleton(){
+  content.innerHTML='<div class="grid">'+Array(6).fill('<div class="skeleton">'+
+    '<div class="skel-bar"></div><div class="skel-bar"></div>'+
+    '<div class="skel-bar"></div><div class="skel-bar"></div><div class="skel-bar"></div>'+
+  '</div>').join('')+'</div>'
+}
+
+function renderError(){
+  content.innerHTML=`<div class="error-state"><div class="error-inner">
+    <div class="error-icon">💀</div>
+    <h2 class="error-title">The Council is on break</h2>
+    <p class="error-desc">The servers aren't responding. Maybe it's a sign from the universe. Or maybe we're rate-limited and ran out of API calls. Try again, but keep your expectations low.</p>
+    <button class="btn" id="retry-btn">› Retry_<span style="animation:pulse 1.5s infinite">▌</span></button>
+  </div></div>`
+  document.getElementById('retry-btn').onclick=loadCouncil
+}
+
+function renderCards(results){
+  content.innerHTML=`<div class="grid">${results.map((r,i)=>{
+    const m=COUNCIL[i]
+    return `<div class="card" style="animation-delay:${i*120}ms">
+      <div class="card-header">
+        <div class="avatar" style="color:${m.color}">${m.icon}</div>
+        <div style="min-width:0">
+          <div class="card-name" style="color:${m.color}">${m.name}</div>
+          <div class="card-meta">${m.title} · ${m.source}</div>
+        </div>
+      </div>
+      <p class="card-take">${r.take}</p>
+      <div class="card-raw">§ ${r.raw}</div>
+    </div>`
+  }).join('')}</div>`
+}
+
+async function loadCouncil(){
+  reconveneWrap.style.display='none'
+  renderSkeleton()
+  statusDot.classList.add('pulse')
+  statusText.classList.add('status-text')
+  let si=0
+  statusText.textContent=STATUS_MSGS[0]
+  const iv=setInterval(()=>{si=(si+1)%STATUS_MSGS.length;statusText.textContent=STATUS_MSGS[si]},1200)
+
+  try{
+    const [hn,nasa,weather,git,phil,oracle]=await Promise.all([
+      getHN(),getNASA(),getWeather(),getGitHub(),
+      Promise.resolve(getPhilosopher()),Promise.resolve(getOracleInner()),
+    ])
+    renderCards([hn,nasa,weather,git,phil,oracle])
+    statusText.textContent='Council in session. Take notes.'
+    statusText.classList.remove('status-text')
+    reconveneWrap.style.display='flex'
+  }catch{
+    renderError()
+    statusText.textContent='The Council has adjourned. Unexpectedly.'
+  }finally{
+    clearInterval(iv)
+    statusDot.classList.remove('pulse')
+  }
+}
+
+reconveneBtn.onclick=loadCouncil
+
+loadCouncil()
+</script>
+</body>
+</html>
