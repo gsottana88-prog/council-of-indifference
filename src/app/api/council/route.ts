@@ -21,7 +21,7 @@ const councilMembers: CouncilMember[] = [
 
 async function getLocation(): Promise<Location> {
   try {
-    const res = await fetch('https://ipapi.co/json/', { next: { revalidate: 3600 } })
+    const res = await fetch('https://ipapi.co/json/', { cache: 'no-store' })
     if (!res.ok) return { lat: 40.7128, lon: -74.0060, city: 'New York' }
     const data = await res.json()
     return { lat: data.latitude ?? 40.7128, lon: data.longitude ?? -74.0060, city: data.city ?? 'Somewhere' }
@@ -33,9 +33,9 @@ async function getLocation(): Promise<Location> {
 async function getHNTopStory(): Promise<CouncilData> {
   const member = councilMembers[0]
   try {
-    const idsRes = await fetch('https://hacker-news.firebaseio.com/v0/topstories.json', { next: { revalidate: 300 } })
+    const idsRes = await fetch('https://hacker-news.firebaseio.com/v0/topstories.json', { cache: 'no-store' })
     const ids: number[] = await idsRes.json()
-    const itemRes = await fetch(`https://hacker-news.firebaseio.com/v0/item/${ids[0]}.json`, { next: { revalidate: 300 } })
+    const itemRes = await fetch(`https://hacker-news.firebaseio.com/v0/item/${ids[0]}.json`, { cache: 'no-store' })
     const item: HackerNewsItem = await itemRes.json()
     return {
       member,
@@ -51,7 +51,7 @@ async function getHNTopStory(): Promise<CouncilData> {
 async function getNasaApod(): Promise<CouncilData> {
   const member = councilMembers[1]
   try {
-    const res = await fetch('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY', { next: { revalidate: 3600 } })
+    const res = await fetch('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY', { cache: 'no-store' })
     const data: NasaApod = await res.json()
     return {
       member,
@@ -69,12 +69,12 @@ async function getWeather(location: Location): Promise<CouncilData> {
   try {
     const pointRes = await fetch(`https://api.weather.gov/points/${location.lat},${location.lon}`, {
       headers: { 'User-Agent': 'CouncilOfIndifference/1.0 (council@example.com)' },
-      next: { revalidate: 1800 },
+      cache: 'no-store',
     })
     const pointData = await pointRes.json()
     const forecastRes = await fetch(pointData.properties.forecast, {
       headers: { 'User-Agent': 'CouncilOfIndifference/1.0 (council@example.com)' },
-      next: { revalidate: 1800 },
+      cache: 'no-store',
     })
     const forecastData = await forecastRes.json()
     const period = forecastData.properties.periods[0]
@@ -93,7 +93,7 @@ async function getWeather(location: Location): Promise<CouncilData> {
 async function getGitHubTrends(): Promise<CouncilData> {
   const member = councilMembers[3]
   try {
-    const res = await fetch('https://api.gitterapp.com/repositories', { next: { revalidate: 3600 } })
+    const res = await fetch('https://api.gitterapp.com/repositories', { cache: 'no-store' })
     const repos: GitHubTrend[] = await res.json()
     const top = repos[0]
     return {
