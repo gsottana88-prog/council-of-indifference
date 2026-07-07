@@ -8,7 +8,7 @@ tragicomic perspectives**. No API keys needed. Just templates and free cynicism.
 
 ## Deploy in 1 click
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/YOUR_USERNAME/council-of-indifference)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/gsottana88-prog/council-of-indifference)
 
 Or:
 
