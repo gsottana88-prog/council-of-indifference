@@ -109,13 +109,13 @@ function startupBroTemplate(title,score,comments){
   ])
 }
 
-function redditTemplate(title,score,comments,sub){
+function newsTemplate(title,site,summary){
+  const s=(summary||'').length>180?summary.slice(0,177)+'...':(summary||'')
   return pick([
-    `r/${sub} is losing its collective mind over "${title}". ${score} upvotes, ${comments} comments. The discourse is dense, informed, and wrong. As always.`,
-    `"${title}" — ${score} people thought this was worth upvoting on r/${sub}. In 24 hours it'll be buried under cat memes. The internet's memory is a goldfish with ADHD.`,
-    `Breaking on r/${sub}: "${title}" ${score} upvotes. The comments are a mix of people who read the headline and people who read nothing. Both are equally confident about being right.`,
-    `Today's tech drama on r/${sub}: "${title}" ${score} upvotes, ${comments} hot takes. Everyone has an opinion. Nobody has a solution. Classic internet.`,
-    `r/${sub} post: "${title}" — ${score} nerds nodded in agreement. ${comments} comments later, the thread is a war crime of pedantry and missing the point.`,
+    `"${title}" from ${site}. ${s} Translation: another thing happened somewhere. You'll pretend to care for 4 seconds, then scroll.`,
+    `Today in ${site}: "${title}". ${s} The news cycle continues its relentless march toward your complete indifference.`,
+    `Breaking from ${site}: "${title}". ${s} Important? Maybe. Will you remember it by tomorrow? Define "tomorrow." Define "remember." Actually, don't.`,
+    `"${title}" — ${site} reports. ${s} Somewhere, someone is very excited about this. You are not that person. You are never that person.`,
   ])
 }
 
@@ -184,14 +184,14 @@ async function getHN(){
   }
 }
 
-async function getReddit(){
+async function getNews(){
   try{
-    const r=await fetch('https://www.reddit.com/r/technology/hot.json?limit=5',{headers:{'User-Agent':'CouncilOfIndifference/1.0'}})
+    const r=await fetch('https://api.spaceflightnewsapi.net/v4/articles/?limit=1')
     const d=await r.json()
-    const p=d.data.children[0].data
-    return {raw:`"${p.title}" (r/${p.subreddit}, ${p.score} upvotes)`,take:redditTemplate(p.title,p.score,p.num_comments,p.subreddit)}
+    const a=d.results[0]
+    return {raw:`"${a.title}" (${a.news_site})`,take:newsTemplate(a.title,a.news_site,a.summary)}
   }catch{
-    return {raw:'Reddit is down',take:'Reddit isn\'t answering. Probably arguing with itself. That tracks.'}
+    return {raw:'News service unavailable',take:'The news feed is down. Probably for the best — less noise, more nothing.'}
   }
 }
 
@@ -280,11 +280,11 @@ async function loadCouncil(){
   const iv=setInterval(()=>{si=(si+1)%STATUS_MSGS.length;statusText.textContent=STATUS_MSGS[si]},1200)
 
   try{
-    const [hn,reddit,weather,git,phil,oracle]=await Promise.all([
-      getHN(),getReddit(),getWeather(),getGitHub(),
+    const [hn,news,weather,git,phil,oracle]=await Promise.all([
+      getHN(),getNews(),getWeather(),getGitHub(),
       Promise.resolve(getPhilosopher()),Promise.resolve(getOracleInner()),
     ])
-    renderCards([hn,reddit,weather,git,phil,oracle])
+    renderCards([hn,news,weather,git,phil,oracle])
     statusText.textContent='Council in session. Take notes.'
     statusText.classList.remove('status-text')
     reconveneWrap.style.display='flex'
