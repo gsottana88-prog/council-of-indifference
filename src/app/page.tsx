@@ -59,7 +59,7 @@ const colorMap: Record<string, string> = {
   'cosmic-rick': 'cosmic',
   'weather-dad': 'sky',
   'internet-id': 'teal',
-  'dad-joker': 'chaos',
+  'local-philosopher': 'chaos',
   'oracle': 'pulse',
 }
 

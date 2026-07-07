@@ -3,11 +3,11 @@ export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import type {
   CouncilMember, CouncilData, CouncilResponse,
-  HackerNewsItem, NasaApod, NwsForecast, Location, GitHubTrend, ChuckJoke,
+  HackerNewsItem, NasaApod, NwsForecast, Location, GitHubTrend,
 } from '@/lib/types'
 import {
   startupBroTemplate, cosmicRickTemplate, weatherDadTemplate,
-  internetIdTemplate, dadJokeTemplate, oracleTemplate,
+  internetIdTemplate, localPhilosopherTemplate, oracleTemplate,
 } from '@/lib/templates'
 
 const councilMembers: CouncilMember[] = [
@@ -15,7 +15,7 @@ const councilMembers: CouncilMember[] = [
   { id: 'cosmic-rick', name: '🌌 Cosmic Rick', title: 'Interstellar Nihilist', color: '#6b5bff', icon: '✦', dataSource: 'NASA APOD' },
   { id: 'weather-dad', name: '🌦️ Weather Dad', title: 'Meteorological Cynic', color: '#45b7d1', icon: '☁', dataSource: 'National Weather Service' },
   { id: 'internet-id', name: '🐙 The Code Karen', title: 'GitHub Trendspotter', color: '#4ecdc4', icon: '⌘', dataSource: 'GitHub Trending' },
-  { id: 'dad-joker', name: '😐 Dad Joker', title: 'Existential Comedian', color: '#ff9f43', icon: '⚡', dataSource: 'Chuck Norris Wisdom' },
+  { id: 'local-philosopher', name: '🪐 The Local Philosopher', title: 'Professional Cynic', color: '#ff9f43', icon: '⚡', dataSource: 'The Void Within' },
   { id: 'oracle', name: '🔮 The Oracle', title: 'Cosmic Fortune Teller', color: '#ff6bb5', icon: '◎', dataSource: 'The Void' },
 ]
 
@@ -107,19 +107,13 @@ async function getGitHubTrends(): Promise<CouncilData> {
   }
 }
 
-async function getJoke(): Promise<CouncilData> {
+function getLocalPhilosopher(): CouncilData {
   const member = councilMembers[4]
-  try {
-    const res = await fetch('https://api.chucknorris.io/jokes/random', { next: { revalidate: 60 } })
-    const data: ChuckJoke = await res.json()
-    return {
-      member,
-      rawInput: `"${data.value}"`,
-      take: dadJokeTemplate(data.value),
-      timestamp: new Date().toISOString(),
-    }
-  } catch (e) {
-    return { member, rawInput: 'Chuck Norris broke the API', take: `Chuck Norris isn't answering. Probably punching the server. Respect.`, timestamp: new Date().toISOString() }
+  return {
+    member,
+    rawInput: 'Consulting the inner void...',
+    take: localPhilosopherTemplate(),
+    timestamp: new Date().toISOString(),
   }
 }
 
@@ -140,7 +134,7 @@ export async function GET() {
     getNasaApod(),
     getWeather(location),
     getGitHubTrends(),
-    getJoke(),
+    Promise.resolve(getLocalPhilosopher()),
     Promise.resolve(getOracle()),
   ])
 

@@ -39,12 +39,14 @@ export function internetIdTemplate(repo: string, description: string, language: 
   ])
 }
 
-export function dadJokeTemplate(joke: string): string {
+export function localPhilosopherTemplate(): string {
   return pick([
-    `Joke: "${joke}" It's terrible. I know. But the universe told it, not me. Take it up with him.`,
-    `"${joke}" If you're laughing, I'm worried about you. If you're not laughing, I'm still worried. Can't win with me.`,
-    `${joke} There. A random nugget of wisdom. Don't ask me why. Don't look for meaning. Enjoy it. Or suffer. Your choice (not that it matters).`,
-    `Word of the day: "${joke}" Sure, you didn't ask for it. But I'm giving it to you anyway. Why? Because I can. Because you're here. Because why not.`,
+    'The universe is indifferent not because it hates you, but because "you" aren\'t really a thing it can register. You\'re a local fluctuation. A temporary typo in the cosmos.',
+    'You spend 80 years trying to matter. The universe spends 14 billion years not noticing. One of you is winning, and it\'s not the one with a 401(k).',
+    'Every time you feel important, remember: you\'re a bag of mostly water on a rock hurtling through a void so cold and vast it makes your problems look like dust. Comforting, right?',
+    'You asked for wisdom. Here it is: nothing matters, everything is fine, and the only honest response to existence is a long, slow nod. There. Saved you therapy.',
+    'The void doesn\'t answer prayers. It doesn\'t answer anything. It just void-s. That\'s the cosmic equivalent of a shrug. Take notes.',
+    'Your deepest thoughts? Electrical impulses in a damp organ. Your grandest ambitions? Carbon trying to feel special. Sit down.',
   ])
 }
 

@@ -46,10 +46,6 @@ export interface Location {
   city?: string
 }
 
-export interface ChuckJoke {
-  value: string
-}
-
 export interface GitHubTrend {
   repo: string
   description: string
