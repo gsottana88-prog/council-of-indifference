@@ -89,7 +89,7 @@ export default function Home() {
     setStatusText(statusMessages[0])
 
     try {
-      const res = await fetch('/api/council')
+      const res = await fetch(`/api/council?_=${Date.now()}`)
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const json: CouncilResponse = await res.json()
       setData(json)
