@@ -195,18 +195,28 @@ async function getNews(){
   }
 }
 
+const NWS_HEADERS = {'User-Agent':'CouncilOfIndifference/1.0 (council-of-indifference.github.io)'}
+const WEATHER_FAILS = [
+  'The weather is unavailable. Like hope, lately.',
+  'Even the weather API ghosted me. Can\'t say I blame it.',
+  'NWS refused to talk. Probably too busy predicting the same forecast for 3 days straight.',
+  'Failed to fetch the weather. Consider it a metaphor.',
+  'The atmosphere declined to comment. Strike that — the API did.',
+]
+
 async function getWeather(){
   try{
     const pos=await new Promise((res,rej)=>{navigator.geolocation.getCurrentPosition(res,rej,{timeout:5000})})
     const lat=pos.coords.latitude,lon=pos.coords.longitude
-    const pr=await fetch(`https://api.weather.gov/points/${lat},${lon}`)
+    const cb='?_='+Date.now()
+    const pr=await fetch(`https://api.weather.gov/points/${lat},${lon}${cb}`,{headers:NWS_HEADERS})
     const pd=await pr.json()
-    const fr=await fetch(pd.properties.forecast)
+    const fr=await fetch(pd.properties.forecast+'?'+Date.now(),{headers:NWS_HEADERS})
     const fd=await fr.json()
     const p=fd.properties.periods[0]
     return {raw:`${lat.toFixed(2)},${lon.toFixed(2)}: ${p.temperature}°${p.temperatureUnit}, ${p.shortForecast}`,take:weatherDadTemplate(p.temperature,p.shortForecast,'Your Location')}
   }catch{
-    return {raw:'Weather service unavailable',take:'The weather is unavailable. Like hope, lately.'}
+    return {raw:'Weather service unavailable',take:pick(WEATHER_FAILS)}
   }
 }
 
